@@ -1,0 +1,128 @@
+<div class="card">
+  <div *ngIf="address.isDefault" class="card-header">
+    direccion por defecto
+  </div>
+  <div class="card-body">
+    <address>
+      <p>Nombres: <strong>{{address.firstName}} {{address.lastName}}</strong></p>
+      <p>DNI: {{address.DNI}}</p>
+      <p>Celular: {{address.cellPhone}}</p>
+      <p>Dir. de envio: {{address.shippingAddress}}</p>
+      <p>Ubicacion: {{address.district.name}}, {{address.province.name}}, {{address.department.name}}</p>
+    </address>
+    <a data-toggle="modal" [attr.data-target]="'#modalEditAddressNoDefault'+index" class="check-btn sqr-btn ">
+      <i class="fa fa-edit"></i>
+      Editar
+    </a>
+    <button *ngIf="!address.isDefault" class="check-btn sqr-btn " (click)="deleteAddress(address._id)">
+      <i class="fa fa-edit"></i>
+      Eliminar
+    </button>
+    <a *ngIf="!address.isDefault" class="check-btn sqr-btn " (click)="setAddressAsDefault(address._id)">
+      <i class="fa fa-edit"></i>
+      Establecer por defecto
+    </a>
+    <div class="modal fade" id="modalEditAddressNoDefault{{index}}" tabindex="-1" role="dialog"
+      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Editar direccion</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="myaccount-content " style="border: 0;padding: 0;">
+              <div class="account-details-form mt-0">
+                <div style="height: 10px;"></div>
+                <form [formGroup]="updateAddressForm"
+                  (ngSubmit)=updateAddress(address._id,updateAddressForm,closeEditModal)>
+                  <fieldset>
+
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="single-input-item">
+                          <label for="firstName" class="required">Nombres</label>
+                          <input type="text" id="firstName" formControlName="firstName"
+                            [(ngModel)]="address.firstName" />
+                          <div
+                            *ngIf="updateAddressForm.get('firstName').hasError('required') && updateAddressForm.get('firstName').touched">
+                            Ingrese un nombre por favor.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="single-input-item">
+                          <label for="lastName" class="required">Apellidos</label>
+                          <input type="text" id="lastName" formControlName="lastName" [(ngModel)]="address.lastName" />
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="single-input-item">
+                          <label for="DNI" class="required">DNI</label>
+                          <input maxlength="8" numeric type="number" id="DNI" formControlName="DNI"
+                            [(ngModel)]="address.DNI" />
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="single-input-item">
+                          <label for="cellPhone" class="required">Celular</label>
+                          <input type="number" numeric id="cellPhone" formControlName="cellPhone"
+                            [(ngModel)]="address.cellPhone" />
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="single-input-item">
+                          <label for="department" class="required">Departamento</label>
+                          <select (change)="changeDepartment($event.target.value)" id="department"
+                            formControlName="department">
+                            <option [value]="department.id" *ngFor="let department of ubigeoService.departments">
+                              {{department.name}}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="single-input-item">
+                          <label for="province" class="required">Provincia</label>
+                          <select (change)="changeProvince($event.target.value)" id="province"
+                            formControlName="province">
+                            <option [value]="province.id" *ngFor="let province of provinces">{{province.name}}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="single-input-item">
+                          <label for="district" class="required">Distrito</label>
+                          <select id="district" formControlName="district" aria-placeholder="Seleccione...">
+                            <option [value]="district.id" *ngFor="let district of districts">{{district.name}}</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-12">
+                        <div class="single-input-item">
+                          <label for="shippingAddress" class="required">Direccion de envio</label>
+                          <input type="text" id="shippingAddress" formControlName="shippingAddress"
+                            [(ngModel)]="address.shippingAddress" />
+                        </div>
+                      </div>
+                    </div>
+                  </fieldset>
+                  <div class="single-input-item d-flex justify-content-between">
+                    <button class="check-btn sqr-btn" [ngStyle]="{'opacity': updateAddressForm.invalid ? '0.3': '1'  }"
+                      type="submit" [disabled]="updateAddressForm.invalid">Actualizar
+                      direccion</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer hidden">
+            <button type="button" class=" btn btn-secondary" data-dismiss="modal" #closeEditModal>Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

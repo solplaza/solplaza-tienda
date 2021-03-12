@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div *ngIf="paymentMethod == 'culqi'" class="jumbotron" style="background-color: white !important;">
+        <h1 class="display-4">Se recibió su pedido</h1>
+        <p class="lead">Para hacer el seguimiento de su pedido puede ir a su cuenta y seleccionar la pestaña "Mis
+          pedidos" donde vera todos
+          sus pedidos realizados junto con el estado de el pedido, para ver mas detalles de un pedido tiene que dar
+          click en
+          el enlace "Informacion del pedido"</p>
+        <hr class="my-4">
+        <p>Gracias por su compra</p>
+        <p class="lead">
+          <a class="btn btn-primary btn-lg btn-red" [routerLink]="['/home']" role="button">Seguir comprando</a>
+        </p>
+      </div>
+      <div *ngIf="paymentMethod == 'wireTransfer'" class="jumbotron" style="background-color: white !important;">
+        <h1 class="display-4">Se recibió su pedido</h1>
+        <p class="lead">Recuerda que tu pedido no sera enviado hasta que deposites la cantidad respectiva y envies una
+          foto del voucher escaneado o en fotografia donde se muestren visibles los datos a el correo
+          contable@solplaza.net</p>
+        <hr class="my-4">
+        <p>para evitar el riesgo que los productos en su compra se agoten cancele su pedido lo antes posible</p>
+        <p>Recuerde que su pedido tiene que cancelarse dentro de las 48 horas, si se sobrepasa el tiempo el pedido se
+          eliminara y tendra que realiazr el proceso de nuevo</p>
+        <p class="lead">
+          <a class="btn btn-primary btn-lg btn-red" [routerLink]="['/home']" role="button">Seguir comprando</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

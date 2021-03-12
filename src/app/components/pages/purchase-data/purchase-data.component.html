@@ -1,0 +1,211 @@
+<div *ngIf="client" class="cart-main-area pt-85 pb-90">
+  <div class="container">
+    <h3 class="cart-page-title">Realizar la compra</h3>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+
+        <div class="row">
+          <div class="col-lg-6 col-md-6">
+            <div class="cart-tax">
+              <div class="title-wrap">
+                <h4 class="cart-bottom-title section-bg-gray">Estimar precio de envio</h4>
+              </div>
+              <div class="tax-wrapper">
+                <p>ingresa la ubicacion de destino para estimar un precio</p>
+                <div class="tax-select-wrapper">
+                  <div class="tax-select">
+                    <label>
+                      Elegir una de tus direcciones
+                    </label>
+                    <form [formGroup]="shippingAddressForm">
+                      <select (change)="selectChanged($event.target.value)" class="email s-email s-wid" formControlName="shippingAddressSelected">
+                        <ng-container *ngIf="client.addresses.length > 0">
+                          <option [value]="address._id" *ngFor="let address of client.addresses" [selected]="address.isDefault == true">
+                            {{address.firstName + ' ' + address.lastName +' '+address.DNI+' '+' '+address.cellPhone+' '+address.district.name+' '+address.province.name+' '+address.department.name}}
+                          </option>
+                        </ng-container>
+                        <option [selected]="client.addresses.length === 0" value="newAddress">Nueva direccion</option>
+                      </select>
+                    </form>
+
+                  </div>
+                </div>
+                <hr>
+
+                <div *ngIf="newAddressSelectedFlag" class="myaccount-content ">
+                  <div class="account-details-form mt-0">
+                    <div style="height: 10px;"></div>
+                    <form [formGroup]="newAddressForm">
+                      <fieldset>
+
+                        <div class="row">
+                          <div class="col-lg-6">
+                            <div class="single-input-item">
+                              <label for="firstName" class="required">Nombres</label>
+                              <input type="text" id="firstName" formControlName="firstName" />
+                              <div *ngIf="newAddressForm.get('firstName').hasError('required') && newAddressForm.get('firstName').touched">
+                                Ingrese un nombre por favor.
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="single-input-item">
+                              <label for="lastName" class="required">Apellidos</label>
+                              <input type="text" id="lastName" formControlName="lastName" />
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="single-input-item">
+                              <label for="DNI" class="required">DNI</label>
+                              <input maxlength="8" numeric type="text" id="DNI" formControlName="DNI" />
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="single-input-item">
+                              <label for="cellPhone" class="required">Celular</label>
+                              <input maxlength="9" type="texts" numeric id="cellPhone" formControlName="cellPhone" />
+
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="single-input-item">
+                              <label class="required">Departamento</label>
+                              <select (change)="changeDepartment($event.target.value)" formControlName="department">
+                                <option value="">-- Seleccione un departamento --</option>
+                                <option value="{{department.id}}" *ngFor="let department of departments">
+                                  {{department.name}}
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-6">
+                            <div class="single-input-item">
+                              <label class="required">Provincia</label>
+                              <select (change)="changeProvince($event.target.value )" formControlName="province">
+                                <option value="">-- Seleccione una provincia --</option>
+
+                                <option value="{{province.id}}" *ngFor="let province of provinces">
+                                  {{province.name}}
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="single-input-item">
+                              <label class="required">Distrito</label>
+                              <select formControlName="district">
+                                <option value="">-- Seleccione un distrito --</option>
+                                <option value="{{district.id}}" *ngFor="let district of districts">
+                                  {{district.name}}
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-12">
+                            <div class="single-input-item">
+                              <label for="current-pwd" class="required">Direccion de envio</label>
+                              <input type="text" id="current-pwd" formControlName="shippingAddress" />
+                            </div>
+                          </div>
+                        </div>
+                      </fieldset>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6">
+            <div class="discount-code-wrapper">
+              <div class="title-wrap mb-3">
+                <h4 class="cart-bottom-title section-bg-gray">Metodo de pago</h4>
+              </div>
+              <form class="form-payment-methods" [formGroup]="paymentMethodsForm">
+                <div class="form-check mb-3">
+                  <input class="form-check-input" type="radio" id="bankTransfer" value="Transferencia bancaria" formControlName="paymentMethod" [attr.name]="'payment'">
+                  <label class="form-check-label" for="bankTransfer">
+                    Transferencia bancaria
+                  </label>
+                  <!-- <p>vea las formas de pago <a target="_blank" href="https://compugaming.net/payment-methods.html">aqui</a></p> -->
+                </div>
+                <hr>
+                <div class="form-check mb-3">
+                  <input class="form-check-input" style="width: 0;height: 0;" type="radio" id="exampleRadios2" value="Tarjeta de credito o debito" formControlName="paymentMethod" [attr.name]="'payment'">
+                  <label class="form-check-label" for="exampleRadios2">
+                    Paga seguro con
+                    tarjeta de crédito ó débito en CULQI
+                  </label>
+                </div>
+                <!-- <div class="contenedor-bancos">
+                  <div class="item">
+                    <img alt="imagen" class="bancos" src="https://www.payulatam.com/pe/wp-content/uploads/sites/3/2017/03/Visa.png">
+                  </div>
+                  <div class="item">
+                    <img alt="imagen" class="bancos" src="https://www.payulatam.com/pe/wp-content/uploads/sites/3/2017/03/MasterCard.png">
+                  </div>
+                  <div class="item">
+                    <img alt="imagen" class="bancos" src="https://www.payulatam.com/pe/wp-content/uploads/sites/3/2017/03/american_express.png">
+                  </div>
+                  <div class="item">
+                    <img alt="imagen" class="bancos" src="https://www.payulatam.com/pe/wp-content/uploads/sites/3/2017/03/DinersClub_PayU.png">
+                  </div>
+                  <div class="item">
+                    <img alt="imagen" class="bancos" src="https://www.payulatam.com/pe/wp-content/uploads/sites/3/2017/03/bcp.png">
+                  </div>
+                </div> -->
+              </form>
+            </div>
+
+          </div>
+          <div class="col-lg-12 col-md-12 pt-5">
+            <div class="grand-totall">
+              <div class="title-wrap">
+                <h4 class="cart-bottom-title section-bg-gary-cart">Total del carrito</h4>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th scope="col">Producto</th>
+                      <th scope="col">Precio unitario</th>
+                      <th scope="col">cantidad</th>
+                      <th scope="col">precio</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of client.cart">
+                      <th>{{item.product.name | sliceCart}}</th>
+                      <td>{{item.product.price | nuevoSol}}</td>
+                      <td>{{item.quantity}}</td>
+                      <td>{{item.quantity * item.product.price | nuevoSol}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h5>Precio de productos <span>{{total | nuevoSol}}</span></h5>
+              <div class="total-shipping">
+                <h5>Precio de envio</h5>
+                <ul>
+                  <li> Envio <span>S/. 0.00</span></li>
+
+                </ul>
+              </div>
+              <h4 class="grand-totall-title">Total <span>{{total | nuevoSol}}</span></h4>
+              <button #btnMakePurchase [disabled]="newAddressForm.invalid && newAddressSelectedFlag == true" [ngStyle]="{'opacity': newAddressForm.invalid && newAddressSelectedFlag == true ? '0.3': '1'  }" type="submit" (click)="makePurchase(newAddressForm,paymentMethodsForm, shippingAddressForm, btnMakePurchase,proccesingPurchaseSpinner )">
+                Realizar pedido
+              </button>
+              <div #proccesingPurchaseSpinner class="d-none align-items-center flex-column">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+                <p>Procesando, por favor espere</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

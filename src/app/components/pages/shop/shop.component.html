@@ -1,0 +1,140 @@
+
+<div class="shop-area pt-90 pb-90">
+  <div class="container">
+    <div class="row flex-row-reverse">
+      <div class="col-lg-12">
+        <div class="shop-topbar-wrapper">
+          <div class="shop-topbar-left">
+            <div class="view-mode nav">
+              <a class="active" href="#shop-1" data-toggle="tab"><i class="la la-th"></i></a>
+              <a href="#shop-2" data-toggle="tab"><i class="la la-list-ul"></i></a>
+            </div>
+            <p>Mostrando {{productsFound.length}} producto(s) de {{productsFound.length}} resultados </p>
+          </div>
+                   </div>
+        <div *ngIf="productsFound.length == 0" class="col-12 d-flex justify-content-center">
+          <h3>No hay resultados para la busqueda :(</h3>
+        </div>
+        <div class="shop-bottom-area">
+          <div class="tab-content jump">
+            <div id="shop-1" class="tab-pane active">
+              <div class="row">
+                <div *ngFor="let producto of productsFound" class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
+                  <app-product-card [product]="producto"></app-product-card>
+                </div>
+              </div>
+            </div>
+            <div id="shop-2" class="tab-pane">
+              <div *ngFor="let product of productsFound" class="shop-list-wrap mb-30">
+                <div class="row">
+                  <div class="col-xl-4 col-lg-5 col-md-6 col-sm-6">
+                    <div class="product-list-img">
+                      <a >
+                        <img alt="imagen" (click)="goToProduct(product._id)" [src]="product.imageURL" alt="Product Style">
+                      </a>
+                                           </div>
+                  </div>
+                  <div class="col-xl-8 col-lg-7 col-md-6 col-sm-6">
+                    <div class="shop-list-content">
+                      <span>Laptop</span>
+                      <h4><a (click)="goToProduct(product._id)">{{product.name}}</a></h4>
+                      <div class="pro-list-price">
+                        <span>{{product.price | nuevoSol}}</span>
+
+                      </div>
+                      <p>{{product.description}}</p>
+                                           </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="productsFound.length > 15" class="pagination-style text-center">
+              <ul>
+                <li><a class="prev" href="#"><i class="la la-angle-left"></i></a></li>
+                <li><a href="#">01</a></li>
+                <li><a href="#">02</a></li>
+                <li><a class="active" href="#">03</a></li>
+                <li><a href="#">04</a></li>
+                <li><a href="#">05</a></li>
+                <li><a href="#">06</a></li>
+                <li><a class="next" href="#"><i class="la la-angle-right"></i></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">x</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-5 col-sm-12 col-xs-12">
+            <div class="tab-content quickview-big-img">
+              <div id="pro-1" class="tab-pane fade show active">
+                <img alt="imagen" src="assets/images/product/producto1N.jpg" alt="">
+              </div>
+              <div id="pro-2" class="tab-pane fade">
+                <img alt="imagen" src="assets/images/product/quickview-l2.jpg" alt="">
+              </div>
+              <div id="pro-3" class="tab-pane fade">
+                <img alt="imagen" src="assets/images/product/quickview-l3.jpg" alt="">
+              </div>
+              <div id="pro-4" class="tab-pane fade">
+                <img alt="imagen" src="assets/images/product/quickview-l2.jpg" alt="">
+              </div>
+            </div>
+
+
+          </div>
+          <div class="col-md-7 col-sm-12 col-xs-12">
+            <div class="product-details-content quickview-content">
+              <span>Computacion</span>
+              <h2>Laptop Acer A515-52g</h2>
+              <div class="product-ratting-review">
+                <div class="product-ratting">
+                  <i class="la la-star"></i>
+                  <i class="la la-star"></i>
+                  <i class="la la-star"></i>
+                  <i class="la la-star"></i>
+                  <i class="la la-star-half-o"></i>
+                </div>
+                <div class="product-review">
+                  <span>40+ Comentarios</span>
+                </div>
+              </div>
+              <div class="pro-details-price-wrap">
+                <div class="product-price">
+                  <span>S/. 210.00</span>
+                  <span class="old">S/. 230.00</span>
+                </div>
+                <div class="dec-rang"><span>- 30%</span></div>
+              </div>
+              <div class="pro-details-quality">
+                <div class="cart-plus-minus">
+                  <input class="cart-plus-minus-box" type="text" name="qtybutton" value="02">
+                </div>
+              </div>
+              <div class="pro-details-compare-wishlist">
+                <div class="pro-details-wishlist">
+                  <a title="Add To Wishlist" [routerLink]="['/home']" routerLinkActive="active"><i
+                      class="la la-heart-o"></i> Añadir a la lista de deseos</a>
+                </div>
+              </div>
+              <div class="pro-details-buy-now btn-hover btn-hover-radious">
+                <a [routerLink]="['/home']" routerLinkActive="active">Añadir al carrito</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

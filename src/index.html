@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <title>Sol Plaza | Los mejores productos a tu alcance y a los mejores precios</title>
+  <base href="/">
+  <meta name="description"
+    content="ofrece los mejores productos tecnologicos con la mejor calidad de servicio">
+  <meta name="keywords"
+    content="tencnología, computo, tienda, online, huancayo, gaming, computacion, productos, junin, peru, computadoras, laptops">
+  <meta name="author" content="Max Antony Paucar Ramirez">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css">
+
+  <link rel="stylesheet" href="assets/css/vendor/line-awesome.css">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="assets/css/vendor/themify.css">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-155265682-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+  </script>
+
+  <script>
+    function culqi() {
+      if (Culqi.token) {
+        var token = Culqi.token;
+        var payment_event = new CustomEvent('payment_event', { detail: token });
+        document.dispatchEvent(payment_event);
+      } else {
+        var error = Culqi.error;
+        var payment_event_error = new CustomEvent('payment_event_error', { detail: error });
+        document.dispatchEvent(payment_event_error);
+      }
+    };
+  </script>
+</head>
+
+<body>
+  <app-root></app-root>
+
+
+
+  <script src="assets/js/vendor/jquery-3.3.1.min.js"></script>
+
+  <script src="assets/js/vendor/popper.js"></script>
+
+  <script src="assets/js/vendor/bootstrap.min.js"></script>
+</body>
+
+</html>
+
+

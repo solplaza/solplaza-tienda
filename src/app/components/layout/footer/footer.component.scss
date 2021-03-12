@@ -1,0 +1,9 @@
+.max-credit{
+  color: #f75151;
+  text-decoration: underline;
+  &:hover{
+    text-decoration: none;
+    color: #BF2FFB;
+    transition-duration: 1s;
+  }
+}

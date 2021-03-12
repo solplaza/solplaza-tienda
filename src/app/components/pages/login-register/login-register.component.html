@@ -1,0 +1,183 @@
+<div class="login-register-area pt-85 pb-90">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-7 col-md-12 ml-auto mr-auto">
+        <div class="login-register-wrapper">
+          <div class="login-register-tab-list nav">
+            <a class="active" data-toggle="tab" href="#lg1">
+              <h4> Ingresar </h4>
+            </a>
+            <a data-toggle="tab" href="#lg2">
+              <h4> Registrarse </h4>
+            </a>
+          </div>
+
+          <div class="tab-content">
+            <div id="lg1" class="tab-pane active">
+              <div class="login-form-container">
+                <div class="login-register-form">
+
+                  <form [formGroup]="loginForm" (ngSubmit)="signIn(loginForm)">
+                    <div *ngIf="loginForm.get('email').touched" class="text-danger">
+                      <div *ngIf="loginForm.get('email').hasError('required')">Por favor introduzca un correo
+                      </div>
+                      <div *ngIf="loginForm.get('email').hasError('email')">Por favor introduzca un correo valido
+                      </div>
+                    </div>
+                    <input type="text" name="user-name" placeholder="Correo" formControlName="email">
+                    <div *ngIf="loginForm.get('password').touched" class="text-danger">
+                      <div *ngIf="loginForm.get('password').hasError('required')">Por favor introduzca una contraseña
+                      </div>
+                      <div *ngIf="loginForm.get('password').hasError('minlength')">Por favor introduzca mas de tres
+                        letras
+                      </div>
+                    </div>
+                    <input type="password" name="user-password" placeholder="Contraseña" formControlName="password" autocomplete="on">
+                    <div class="button-box">
+                      <button [ngStyle]="{'opacity': loginForm.invalid ? '0.3': '1'  }" class="btn-login-custom" type="submit" [disabled]="loginForm.invalid">Ingresar</button>
+                      <div class="login-toggle-btn">
+
+                        <a data-toggle="modal" data-target="#recover-pass-modal" title="Quick View">
+                          ¿Olvidaste la contraseña?
+                        </a>
+                      </div>
+                    </div>
+                  </form>
+                  <hr>
+                  <div class="text-center">
+                    <p>Ingresar con las redes sociales</p>
+                  </div>
+                  <div class="d-flex justify-content-around mt-2">
+                    <button class="btn btn-outline-danger botones-sociales" (click)="googleSignIn()">
+                      <i class="la la-google-plus icono-boton-social"></i>
+                      <p>
+                        Ingresar con google
+                      </p>
+                    </button>
+                    <button class="btn btn-outline-primary botones-sociales" (click)="facebookSignIn()">
+                      <i class="la la-facebook-official icono-boton-social"></i>
+                      <p>
+                        Ingresar con facebook
+                      </p>
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+            <div id="lg2" class="tab-pane">
+              <div class="login-form-container">
+                <div class="login-register-form">
+                  <form [formGroup]="regiterForm" (ngSubmit)="register(regiterForm)">
+                    <div *ngIf="regiterForm.get('firstName').touched" class="text-danger">
+                      <div *ngIf="regiterForm.get('firstName').hasError('required')">Por favor introduzca sus nombres
+                      </div>
+                      <div *ngIf="regiterForm.get('firstName').hasError('minlength')">Por favor introduzca mas de 3
+                        letras
+                      </div>
+                    </div>
+                    <input type="text" name="user-name" placeholder="Nombres" formControlName="firstName">
+                    <div *ngIf="regiterForm.get('lastName').touched" class="text-danger">
+                      <div *ngIf="regiterForm.get('lastName').hasError('required')">Por favor introduzca sus nombres
+                      </div>
+                      <div *ngIf="regiterForm.get('lastName').hasError('minlength')">Por favor introduzca mas de 3
+                        letras
+                      </div>
+                    </div>
+                    <input type="text" name="user-name" placeholder="Apellidos" formControlName="lastName">
+                    <div *ngIf="regiterForm.get('email').touched" class="text-danger">
+                      <div *ngIf="regiterForm.get('email').hasError('required')">Por favor introduzca su correo
+                      </div>
+                      <div *ngIf="regiterForm.get('email').hasError('email')">Por favor introduzca un correo valido
+                      </div>
+                    </div>
+                    <input name="user-email" placeholder="Correo electronico" type="Correo" formControlName="email">
+                    <div *ngIf="regiterForm.get('password').touched" class="text-danger">
+                      <div *ngIf="regiterForm.get('password').hasError('required')">Por favor introduzca una contraseña
+                      </div>
+                      <div *ngIf="regiterForm.get('password').hasError('minlength')">Por favor introduzca mas de 3
+                        letras
+                      </div>
+                    </div>
+                    <input type="password" name="user-password" placeholder="Contraseña" formControlName="password" autocomplete="on"><span *ngIf="!regiterForm.valid" class="help-block text-danger">
+                      <div *ngIf="regiterForm.errors?.mismatch">
+                        Las contraseñas no coinciden
+                      </div>
+                    </span>
+                    <input type="password" name="user-verify-password" placeholder="Repita la contraseña" formControlName="verifyPassword" autocomplete="on">
+                    <div *ngIf="regiterForm.get('termsAndConditions').touched" class="text-danger">
+                      <div *ngIf="regiterForm.get('termsAndConditions').hasError('required')">Por favor tiene que
+                        aceptar los terminos y condiciones
+                      </div>
+                    </div>
+                    <div style="padding-left: 0; padding-bottom: 18px;" class="form-check">
+                      <input type="checkbox" required class="form-check-input" formControlName="termsAndConditions" id="exampleCheck1">
+                      <label class="form-check-label" for="exampleCheck1">Al registrarte aceptas los <a href="" target="_blank">Terminos y
+                          condiciones</a></label>
+                    </div>
+                    <div class="button-box">
+                      <button [ngStyle]="{'opacity': regiterForm.invalid ? '0.3': '1'  }" class="btn-login-custom" type="submit" [disabled]="regiterForm.invalid">Registrarse</button>
+                    </div>
+                  </form>
+                  <hr>
+                  <div class="text-center">
+                    <p>Ó registrese con las redes sociales</p>
+                  </div>
+                  <div class="d-flex justify-content-around mt-2">
+                    <button class="btn btn-outline-danger botones-sociales" (click)="googleSignIn()">
+                      <i class="la la-google-plus icono-boton-social"></i>
+                      <p>
+                        Ingresar con google
+                      </p>
+                    </button>
+                    <button class="btn btn-outline-primary botones-sociales" (click)="facebookSignIn()">
+                      <i class="la la-facebook-official icono-boton-social"></i>
+                      <p>
+                        Ingresar con facebook
+                      </p>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="recover-pass-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button #closemodalrecoverpass type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12">
+            <div class="product-details-content quickview-content">
+              <h2>Recupera tu constraseña</h2>
+              <span>introduce tu correo para que te enviemos el link de restauracion</span>
+
+              <form [formGroup]="recoverPasswordForm" (ngSubmit)="recoverPassword(recoverPasswordForm,closemodalrecoverpass)">
+                <input style="margin-top: 15px;margin-bottom: 10px;" formControlName="email" type="text" placeholder="correo electronico">
+                <div *ngIf="recoverPasswordForm.get('email').touched" class="text-danger">
+                  <div *ngIf="recoverPasswordForm.get('email').hasError('required')">Por favor introduzca un email
+                  </div>
+                  <div *ngIf="recoverPasswordForm.get('email').hasError('email')">Por favor introduzca un email valido
+                  </div>
+                </div>
+                <div class="pro-details-buy-now btn-hover btn-hover-radious">
+                  <button [ngStyle]="{'opacity': recoverPasswordForm.invalid ? '0.3': '1'  }" class="btn-login-custom" type="submit" [disabled]="recoverPasswordForm.invalid">Enviar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

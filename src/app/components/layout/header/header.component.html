@@ -1,0 +1,398 @@
+<div *ngIf="sidebar" class="body-overlay"></div>
+<header class="header-area header-padding-4">
+
+
+  <div class="main-header-wrap">
+    <div class="header-top pt-15 pb-15 bg-black-3">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="setting-wrap-2">
+              <div class="setting-content2-right d-flex ">
+                <a *ngIf="!client" [routerLink]="['/login-register']">
+                  <i class="fa fa-sign-in"></i> Ingresar
+                </a>
+                <div *ngIf="client" class="dropdown">
+                  <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-user"></i> {{client.firstName}} <i class="fa fa-caret-down" aria-hidden="true"></i>
+                  </a>
+                  <div class="dropdown-menu profile-dropdown" aria-labelledby="dropdownMenuButton">
+                    <a [routerLink]="['/my-account']" class="dropdown-item" href="#">
+                      <i class="fa fa-tachometer"></i> Mi cuenta
+                    </a>
+                    <a (click)="signOut()" class="dropdown-item">
+                      <i class="fa fa-sign-out"></i> Cerrar sesion
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="header-middle border-top-2 pt-15 pb-15 bg-black-3">
+      <div class="container-fluid">
+        <div class="row align-items-center">
+          <div class="col-lg-2">
+            <div class="logo">
+              <a [routerLink]="['/home']"><img alt="imagen" style="width: 240px" src="assets/images/logo/solplazalogo.png" alt="logo"></a>
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <div class="header-contact-search-wrap">
+              <div class="search-style-3">
+                <div>
+                  <div class="form-search-3">
+                    <form (ngSubmit)="search(headerDesktopSearch)">
+                      <input id="search" class="input-text" #headerDesktopSearch placeholder="Busca aqui..." type="search">
+                      <button type="submit">
+                        <i class="la la-search"></i>
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-2">
+
+            <div (clickOutside)="onClickOutside($event)" class="cart-wrap cart-wrap-3">
+              <button class="cart-active" (click)="mostrarCarrito()">
+                <i class="la la-shopping-cart"></i> <br>
+                <span class="mini-cart-price-3">{{subtotalCart | nuevoSol}}</span>
+                <span class="count-style-3">{{quantityItemsInCart}}</span>
+              </button>
+              <div class="shopping-cart-content" id="carrito">
+                <div class="shopping-cart-top">
+                  <h4>Tu carrito</h4>
+                  <a class="cart-close" (click)="mostrarCarrito()"><i class="la la-close"></i></a>
+                </div>
+                <ul *ngIf="client">
+                  <li class="single-shopping-cart" *ngFor="let productCart of client.cart">
+                    <div class="shopping-cart-img">
+                      <a><img alt="imagen" alt="" style="width: 70px;height: 70px;" [src]="productCart.product.imageURL"></a>
+                      <div class="item-close">
+                        <a href="#"><i class="sli sli-close"></i></a>
+                      </div>
+                    </div>
+                    <div class="shopping-cart-title">
+                      <h4><a [title]="productCart.product.name">{{ productCart.product.name | sliceCart }}</a></h4>
+                      <span>{{productCart.product.price | nuevoSol}}</span>
+                      <span style="font-weight: 300;"> x {{productCart.quantity}}</span>
+                    </div>
+                    <div class="shopping-cart-delete">
+                      <a (click)="deleteProductFromCart(productCart._id)"><i class="la la-trash"></i></a>
+                    </div>
+                  </li>
+                  <ng-container *ngIf="client.cart == 0">
+                    <p>Aun no hay productos en tu carrito</p>
+                  </ng-container>
+                </ul>
+                <ul *ngIf="temporaryCart.length > 0 && !client">
+                  <li class="single-shopping-cart" *ngFor="let productCart of temporaryCart">
+                    <div class="shopping-cart-img">
+                      <a><img alt="imagen" alt="" style="width: 70px;height: 70px;" [src]="productCart.product.imageURL"></a>
+                      <div class="item-close">
+                        <a href="#"><i class="sli sli-close"></i></a>
+                      </div>
+                    </div>
+                    <div class="shopping-cart-title">
+                      <h4><a [title]="productCart.product.name">{{ productCart.product.name | sliceCart }}</a></h4>
+                      <span>{{productCart.product.price | nuevoSol}}</span>
+                      <span style="font-weight: 300;"> x {{productCart.quantity}}</span>
+                    </div>
+                    <div class="shopping-cart-delete">
+                      <a (click)="deleteProductFromCart(productCart._id)"><i class="la la-trash"></i></a>
+                    </div>
+                  </li>
+                </ul>
+                <ng-container *ngIf="temporaryCart.length == 0 && !client">
+                  <p>Aun no hay productos en tu carrito</p>
+                </ng-container>
+
+                <div class="shopping-cart-bottom">
+                  <div class="shopping-cart-total">
+                    <h4>Subtotal <span class="shop-total">{{subtotalCart | nuevoSol}}</span></h4>
+                  </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="shopping-cart-btn btn-hover default-btn text-center">
+                        <a class="black-color" (click)="onClickOutside()" [routerLink]="['/cart']">Ir al carrito</a>
+                      </div>
+                    </div>
+                    <div *ngIf="client" class="col-6">
+                      <div *ngIf="client.cart.length > 0" class="shopping-cart-btn btn-hover default-btn text-center">
+                        <a class="black-color" (click)="onClickOutside()" [routerLink]="['/purchase-data']">Comprar
+                          ahora</a>
+                      </div>
+                    </div>
+                    <div *ngIf="temporaryCart.length > 0" class="col-6">
+                      <div class="shopping-cart-btn btn-hover default-btn text-center">
+                        <a class="black-color" (click)="onClickOutside()" [routerLink]="['/purchase-data']">Comprar
+                          ahora</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="header-bottom sticky-bar">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12 d-flex justify-content-center">
+            <div class="main-menu menu-common-style menu-lh-4 menu-margin-5 menu-font-2">
+              <nav>
+                <ul>
+                  <li class="angle-shape"> <a>Cocina</a>
+                    <ul class="submenu">
+                      <li><a (click)="goToSubcategory('Utencilios')">Utencilios</a></li>
+                      <li><a (click)="goToSubcategory('Loceria')">Loceria</a></li>
+                      <li><a (click)="goToSubcategory('Menageria')">Menageria</a></li>
+                    </ul>
+                  </li>
+                  <li class="angle-shape"> <a>Limpieza</a>
+                    <ul class="submenu">
+                      <li><a (click)="goToSubcategory('Hogar')">Hogar</a></li>
+                      <li><a (click)="goToSubcategory('Personal')">Personal</a></li>
+                    </ul>
+                  </li>
+                  <!-- <li class="angle-shape"> <a>Seguridad</a>
+                    <ul class="submenu">
+                      <li><a (click)="goToSubcategory('Bioseguridad')">Bioseguridad</a></li>
+                      <li><a (click)="goToSubcategory('Personal')">Personal</a></li>
+                      <li><a (click)="goToSubcategory('Industrial')">Industrial</a></li>
+                    </ul>
+                  </li> -->
+                  <li class="angle-shape"> <a>Utiles</a>
+                    <ul class="submenu">
+                      <li><a (click)="goToSubcategory('Escolares')">Escolares</a></li>
+                      <li><a (click)="goToSubcategory('Oficina')">Oficina</a></li>
+                    </ul>
+                  </li>
+                  <li class="angle-shape"> <a>Fiesta</a>
+                    <ul class="submenu">
+                      <li><a (click)="goToSubcategory('Materiales')">Materiales</a></li>
+                    </ul>
+                  </li>
+                  <li class="angle-shape"> <a>Otros</a>
+                    <ul class="submenu">
+                      <li><a (click)="goToSubcategory('Otros')">Otros</a></li>
+                      <!-- <li><a (click)="goToSubcategory('Abonos')">Abonos</a></li>
+                      <li><a (click)="goToSubcategory('Plantas')">Plantas</a></li>
+                      <li><a (click)="goToSubcategory('Insecticidas')">Insecticidas</a></li> -->
+                    </ul>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="header-small-mobile">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-6">
+          <div class="mobile-logo">
+            <a [routerLink]="['/home']">
+              <img alt="imagen" style="width: 154px" src="assets/images/logo/solplazalogo.png">
+            </a>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="header-right-wrap">
+            <div (clickOutside)="onClickOutsideCarritoMobile($event)" class="cart-wrap common-style">
+              <button (click)="mostrarCarritoMobile()" class="cart-active">
+                <i class="la la-shopping-cart"></i>
+                <span class="count-style">{{quantityItemsInCart}}</span>
+              </button>
+
+              <div class="shopping-cart-content" id="carritoMobile">
+                <div class="shopping-cart-top">
+                  <h4>Tu carrito</h4>
+                  <a class="cart-close" (click)="mostrarCarritoMobile()"><i class="la la-close"></i></a>
+                </div>
+                <ul *ngIf="client">
+                  <li class="single-shopping-cart" *ngFor="let productCart of client.cart">
+                    <div class="shopping-cart-img">
+                      <a><img alt="imagen" alt="" style="width: 70px;height: 70px;" [src]="productCart.product.imageURL"></a>
+                      <div class="item-close">
+                        <a href="#"><i class="sli sli-close"></i></a>
+                      </div>
+                    </div>
+                    <div class="shopping-cart-title">
+                      <h4><a [title]="productCart.product.name">{{ productCart.product.name | sliceCart }}</a></h4>
+                      <span>{{productCart.product.price | nuevoSol}}</span>
+                      <span style="font-weight: 300;"> x {{productCart.quantity}}</span>
+                    </div>
+                    <div class="shopping-cart-delete">
+                      <a (click)="deleteProductFromCart(productCart._id)"><i class="la la-trash"></i></a>
+                    </div>
+                  </li>
+                  <ng-container *ngIf="client.cart == 0">
+                    <p>Aun no hay productos en tu carrito</p>
+                  </ng-container>
+                </ul>
+                <ul *ngIf="temporaryCart.length > 0 && !client">
+                  <li class="single-shopping-cart" *ngFor="let productCart of temporaryCart">
+                    <div class="shopping-cart-img">
+                      <a><img alt="imagen" alt="" style="width: 70px;height: 70px;" [src]="productCart.product.imageURL"></a>
+                      <div class="item-close">
+                        <a href="#"><i class="sli sli-close"></i></a>
+                      </div>
+                    </div>
+                    <div class="shopping-cart-title">
+                      <h4><a [title]="productCart.product.name">{{ productCart.product.name | sliceCart }}</a></h4>
+                      <span>{{productCart.product.price | nuevoSol}}</span>
+                      <span style="font-weight: 300;"> x {{productCart.quantity}}</span>
+                    </div>
+                    <div class="shopping-cart-delete">
+                      <a (click)="deleteProductFromCart(productCart._id)"><i class="la la-trash"></i></a>
+                    </div>
+                  </li>
+                </ul>
+                <ng-container *ngIf="temporaryCart.length == 0 && !client">
+                  <p>Aun no hay productos en tu carrito</p>
+                </ng-container>
+
+                <div class="shopping-cart-bottom">
+                  <div class="shopping-cart-total">
+                    <h4>Subtotal <span class="shop-total">{{subtotalCart | nuevoSol}}</span></h4>
+                  </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="shopping-cart-btn btn-hover default-btn text-center">
+                        <a class="black-color" (click)="onClickOutside()" [routerLink]="['/cart']">Ir al carrito</a>
+                      </div>
+                    </div>
+                    <div *ngIf="client" class="col-6">
+                      <div *ngIf="client.cart.length > 0" class="shopping-cart-btn btn-hover default-btn text-center">
+                        <a class="black-color" (click)="onClickOutside()" [routerLink]="['/purchase-data']">Comprar
+                          ahora</a>
+                      </div>
+                    </div>
+                    <div *ngIf="temporaryCart.length > 0" class="col-6">
+                      <div class="shopping-cart-btn btn-hover default-btn text-center">
+                        <a class="black-color" (click)="onClickOutside()" [routerLink]="['/purchase-data']">Comprar
+                          ahora</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div (clickOutside)="onClickOutsideMovilSidebar($event)" class="mobile-off-canvas">
+              <a class="mobile-aside-button" (click)="showSidebar()"><i class="la la-navicon la-2x"></i></a>
+
+              <div [className]="sidebar ? 'mobile-off-canvas-active inside' : 'mobile-off-canvas-active'">
+                <a class="mobile-aside-close" (click)="closeSidebar()"><i class="la la-close"></i></a>
+
+                <div class="header-mobile-aside-wrap">
+                  <div class="mobile-search">
+                    <form class="search-form" (ngSubmit)="searchMobile(headerMobileSearch)">
+                      <input type="text" #headerMobileSearch placeholder="Buscar en la tienda…">
+                      <button type="submit" class="button-search"><i class="la la-search"></i></button>
+                    </form>
+                  </div>
+                  <div class="mobile-menu-wrap">
+
+                    <div class="mobile-navigation">
+
+                      <nav>
+                        <div style="padding-top: 0; border-top: none;" class="sidebar-widgetM shop-sidebar-border pt-40">
+                          <div class="shop-catigory mt-20">
+                            <ul id="faq">
+                              <li> <a data-toggle="collapse" data-parent="#faq" href="#shop-catigory-1">Cocina <i class="la la-angle-down"></i></a>
+                                <ul id="shop-catigory-1" class="panel-collapse collapse">
+                                  <li><a (click)="goToSubcategory('Utencilios')">Utencilios</a></li>
+                                  <li><a (click)="goToSubcategory('Loceria')">Loceria</a></li>
+                                  <li><a (click)="goToSubcategory('Menageria')">Menageria</a></li>
+                                </ul>
+                              </li>
+                              <li> <a data-toggle="collapse" data-parent="#faq" href="#shop-catigory-2">Limpieza <i class="la la-angle-down"></i></a>
+                                <ul id="shop-catigory-2" class="panel-collapse collapse">
+                                  <li><a (click)="goToSubcategory('Hogar')">Hogar</a></li>
+                                  <li><a (click)="goToSubcategory('Personal')">Personal</a></li>
+                                </ul>
+                              </li>
+                              <!-- <li> <a data-toggle="collapse" data-parent="#faq" href="#shop-catigory-3">Seguridad <i class="la la-angle-down"></i></a>
+                                <ul id="shop-catigory-3" class="panel-collapse collapse">
+                                  <li><a (click)="goToSubcategory('Bioseguridad')">Bioseguridad</a></li>
+                                  <li><a (click)="goToSubcategory('Personal')">Personal</a></li>
+                                  <li><a (click)="goToSubcategory('Industrial')">Industrial</a></li>
+                                </ul>
+                              </li> -->
+                              <li> <a data-toggle="collapse" data-parent="#faq" href="#shop-catigory-4">Utiles
+                                  <i class="la la-angle-down"></i></a>
+                                <ul id="shop-catigory-4" class="panel-collapse collapse">
+                                  <li><a (click)="goToSubcategory('Escolares')">Escolares</a></li>
+                                  <li><a (click)="goToSubcategory('Oficina')">Oficina</a></li>
+                                </ul>
+                              </li>
+                              <li> <a data-toggle="collapse" data-parent="#faq" href="#shop-catigory-5">Fiesta <i class="la la-angle-down"></i></a>
+                                <ul id="shop-catigory-5" class="panel-collapse collapse">
+                                  <li><a (click)="goToSubcategory('Materiales')">Materiales</a></li>
+                                </ul>
+                              </li>
+                              <li> <a data-toggle="collapse" data-parent="#faq" href="#shop-catigory-6">Otros <i class="la la-angle-down"></i></a>
+                                <ul id="shop-catigory-6" class="panel-collapse collapse">
+                                  <li><a (click)="goToSubcategory('Otros')">Otros</a></li>
+                                </ul>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+
+                      </nav>
+
+                    </div>
+
+                  </div>
+                  <div class="mobile-curr-lang-wrap">
+                    <div style="padding-top: 0; border-top: none;" class="sidebar-widget shop-sidebar-border pt-40">
+                      <div class="shop-catigory mt-20">
+                        <ul id="mox">
+                          <li *ngIf="!client"><a [routerLink]="['/login-register']" (click)="closeSidebar()">Iniciar sesion / registrarse</a></li>
+                          <li *ngIf="client">
+                            <a data-toggle="collapse" data-parent="#mox" href="#mi-cuenta">
+                              Mi cuenta <i class="la la-angle-down"></i>
+                            </a>
+                            <ul id="mi-cuenta" class="panel-collapse collapse">
+                              <li>
+                                <a [routerLink]="['/my-account']">Ir al panel</a>
+                              </li>
+                              <li>
+                                <a (click)="signOut()">Cerrar sesion</a>
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="font-size: 30px;" class="mobile-social-wrap">
+                    <a class="facebook" target="_blank" href="https://web.facebook.com/solplazajauja"><i class="ti-facebook"></i></a>
+                    <a class="twitter" target="_blank" href="https://www.youtube.com/channel/UCqDy8Miq89S79v2pNETNbFQ"><i class="ti-youtube"></i></a>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</header>

@@ -1,0 +1,13 @@
+.botones-sociales {
+  display: flex;
+  align-items: center;
+
+  .icono-boton-social {
+    font-size: 30px;
+  }
+  &:hover {
+    p{
+      color: white;
+    }
+  }
+}

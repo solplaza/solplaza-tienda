@@ -1,0 +1,374 @@
+
+
+<div *ngIf="!client" class="d-flex justify-content-center pt-5 pb-5">
+  <div class="spinner-border text-primary" role="status">
+    <span class="sr-only">Cargando...</span>
+  </div>
+</div>
+
+
+
+<div *ngIf="client" class="my-account-wrapper pt-100 pb-100">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+
+        <div class="myaccount-page-wrapper">
+
+          <div class="row">
+            <div class="col-lg-3 col-md-4">
+              <div class="myaccount-tab-menu nav" role="tablist">
+                <a href="#dashboad" class="active" data-toggle="tab"><i class="fa fa-dashboard"></i>
+                  Panel</a>
+                <a href="#account-info" data-toggle="tab"><i class="fa fa-user"></i> Informacion de la cuenta</a>
+                <a href="#address-edit" data-toggle="tab"><i class="fa fa-map-marker"></i> Libreta de direcciones</a>
+                <a href="#orders" data-toggle="tab"><i class="fa fa-cart-arrow-down"></i> Mis pedidos</a>
+                                 <a (click)="signOut()"><i class="fa fa-sign-out"></i> Cerrar sesion</a>
+              </div>
+            </div>
+
+
+            <div class="col-lg-9 col-md-8">
+              <div class="tab-content" id="myaccountContent">
+
+                <div class="tab-pane fade show active" id="dashboad" role="tabpanel">
+                  <div class="myaccount-content">
+                    <h3>Panel</h3>
+                    <div *ngIf="client" class="welcomek">
+                      <p>Hola, <strong>{{client.firstName}}</strong> (Si no eres <strong>{{client.firstName}}
+                          !</strong><a class="logout"> Cierra sesion</a>)</p>
+                    </div>
+
+                    <p class="mb-0">Desde el panel de su cuenta. puede verificar y ver fácilmente sus pedidos
+                      recientes, administrar sus direcciones de envío y facturación, editar su contraseña y detalles de
+                      la cuenta.</p>
+                                       </div>
+                </div>
+
+                <div class="tab-pane fade" id="account-info" role="tabpanel">
+                  <div class="myaccount-content">
+                    <h3>Detalles de cuenta</h3>
+                    <div class="account-details-form">
+                      <form [formGroup]="accountDetailsForm" (ngSubmit)="updateAccountDetails(accountDetailsForm)">
+                        <fieldset>
+                          <legend>Editar datos personales</legend>
+                        </fieldset>
+                        <div class="row">
+                          <div class="col-lg-6">
+                            <div class="single-input-item">
+                              <label for="first-name" class="required">Nombres</label>
+                              <input type="text" id="first-name" [value]="client.firstName"
+                                formControlName="firstName" />
+                              <div class="error"
+                                *ngIf="accountDetailsForm.get('firstName').hasError('minlength') && accountDetailsForm.get('firstName').touched">
+                                minimo 3 letras
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="single-input-item">
+                              <label for="last-name" class="required">Apellidos</label>
+                              <input type="text" id="last-name" [value]="client.lastName" formControlName="lastName" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="single-input-item">
+                          <label for="email" class="required">Direccion de correo electronico</label>
+                          <input type="email" id="email" [value]="client.email" formControlName="email" />
+                        </div>
+                        <div class="single-input-item">
+                          <button class="check-btn sqr-btn " type="submit"
+                            [disabled]="accountDetailsForm.invalid">Actualizar datos</button>
+                        </div>
+                      </form>
+                      <div style="height: 10px;"></div>
+                      <form [formGroup]="resetPasswordForm" (ngSubmit)="resetPassword(resetPasswordForm)">
+                        <fieldset>
+                          <legend>Cambiar contraseña</legend>
+                          <div class="single-input-item">
+                            <label for="current-pwd" class="required">Contraseña actual</label>
+                            <input type="password" id="current-pwd" formControlName="currentPassword" />
+                          </div>
+                          <div class="row">
+                            <div class="col-lg-6">
+                              <div class="single-input-item">
+                                <label for="new-pwd" class="required">Nueva contraseña</label>
+                                <input type="password" id="new-pwd" formControlName="newPassword" />
+                              </div>
+                            </div>
+                            <div class="col-lg-6">
+                              <div class="single-input-item">
+                                <label for="confirm-pwd" class="required">Confirmar nueva contraseña</label>
+                                <input type="password" id="confirm-pwd" formControlName="confirmNewPassword" />
+                              </div>
+                            </div>
+                          </div>
+                        </fieldset>
+                        <div class="single-input-item">
+                          <button class="check-btn sqr-btn " type="submit"
+                            [disabled]="resetPasswordForm.invalid">Actualizar contraseña</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="tab-pane fade" id="address-edit" role="tabpanel">
+                  <div class="myaccount-content">
+                    <div class="d-flex justify-content-between">
+                      <h3 style="margin-bottom: 0;">Direcciones</h3>
+                      <button *ngIf="addAddressFormFlag==false" (click)="showAddAddressForm()">agregar
+                        direccion</button>
+                      <button *ngIf="addAddressFormFlag==true" (click)="showAddAddressForm()">Cancelar</button>
+                    </div>
+                    <div *ngIf="addAddressFormFlag" class="row mt-3 ">
+                      <div class="myaccount-content ">
+                        <div class="account-details-form mt-0">
+                          <div style="height: 10px;"></div>
+                          <form [formGroup]="addAddressForm" (ngSubmit)="createAddress(addAddressForm)">
+                            <fieldset>
+
+                              <div class="row">
+                                <div class="col-lg-6">
+                                  <div class="single-input-item">
+                                    <label for="firstName" class="required">Nombres</label>
+                                    <input type="text" id="firstName" formControlName="firstName" />
+                                    <div class="text-danger"
+                                      *ngIf="addAddressForm.get('firstName').hasError('required') && addAddressForm.get('firstName').touched">
+                                      Ingrese un nombre por favor.
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-lg-6">
+                                  <div class="single-input-item">
+                                    <label class="required">Apellidos</label>
+                                    <input type="text" formControlName="lastName" />
+                                    <div class="text-danger"
+                                      *ngIf="addAddressForm.get('lastName').hasError('required') && addAddressForm.get('lastName').touched">
+                                      Ingrese un apellido por favor.
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-lg-6">
+                                  <div class="single-input-item">
+                                    <label for="DNI" class="required">DNI</label>
+                                    <input maxlength="8" numeric type="text" id="DNI" formControlName="DNI" />
+                                    <div class="text-danger"
+                                      *ngIf="addAddressForm.get('DNI').hasError('required') && addAddressForm.get('DNI').touched">
+                                      Ingrese un DNI por favor.
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-lg-6">
+                                  <div class="single-input-item">
+                                    <label for="cellPhone" class="required">Celular</label>
+                                    <input maxlength="9" type="texts" numeric id="cellPhone"
+                                      formControlName="cellPhone" />
+                                    <div class="text-danger"
+                                      *ngIf="addAddressForm.get('cellPhone').hasError('required') && addAddressForm.get('cellPhone').touched">
+                                      Ingrese un numero celular por favor.
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                  <div class="single-input-item">
+                                    <label class="required">Departamento</label>
+                                    <select (change)="changeDepartment($event.target.value)"
+                                      formControlName="department">
+                                      <option value="">-- Seleccione un departamento --</option>
+                                      <option value="{{department.id}}" *ngFor="let department of departments">
+                                        {{department.name}}
+                                      </option>
+                                    </select>
+                                  </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                  <div class="single-input-item">
+                                    <label class="required">Provincia</label>
+                                    <select (change)="changeProvince($event.target.value )" formControlName="province">
+                                      <option value="">-- Seleccione una provincia --</option>
+
+                                      <option value="{{province.id}}" *ngFor="let province of provinces">
+                                        {{province.name}}
+                                      </option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <div class="col-lg-6">
+                                  <div class="single-input-item">
+                                    <label class="required">Distrito</label>
+                                    <select formControlName="district">
+                                      <option value="">-- Seleccione un distrito --</option>
+                                      <option value="{{district.id}}" *ngFor="let district of districts">
+                                        {{district.name}}
+                                      </option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <div class="col-12">
+                                  <div class="single-input-item">
+                                    <label for="current-pwd" class="required">Direccion de envio (quitar hasta
+                                      requerir)</label>
+                                    <input type="text" id="current-pwd" formControlName="shippingAddress" />
+                                  </div>
+                                </div>
+                              </div>
+                            </fieldset>
+                            <div class="single-input-item d-flex justify-content-between">
+                              <button class="check-btn sqr-btn"
+                                [ngStyle]="{'opacity': addAddressForm.invalid ? '0.3': '1'  }" type="submit"
+                                [disabled]="addAddressForm.invalid">Agregar Direccion</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mt-3">
+                      <ng-container *ngFor="let address of client.addresses; let i = index">
+
+                        <div class="col-lg-6 mt-2" *ngIf="address.isDefault">
+                          <app-address-card [address]="address" [index]="i"></app-address-card>
+                        </div>
+                      </ng-container>
+                      <ng-container *ngFor="let address of client.addresses; let i = index">
+                        <div class="col-lg-6 mt-2" *ngIf="!address.isDefault">
+                          <app-address-card [address]="address" [index]="i"></app-address-card>
+                        </div>
+                      </ng-container>
+                    </div>
+                    <p *ngIf="client.addresses.length == 0">No hay ninguna direccion registrada</p>
+                  </div>
+                </div>
+
+                <div class="tab-pane fade" id="orders" role="tabpanel">
+                  <div class="myaccount-content">
+                    <h3>Pedidos</h3>
+                    <div class="myaccount-table table-responsive text-center">
+                      Si tiene un pedido sin cancelar aun revise <a target="_blank"
+                        href="">Nuestras formas de pago</a>
+                      <p>*Recuerde que un pedido sin cancelar sera eliminado pasada las 48 horas</p>
+                      <table class="table table-bordered">
+                        <thead class="thead-light">
+                          <tr>
+                            <th>Fecha de creacion</th>
+                            <th>Enviado a</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th>Accion</th>
+                          </tr>
+                        </thead>
+                        <tbody *ngIf="client.orders.length > 0">
+                          <tr *ngFor="let order of client.orders | reverse; let i = index ">
+                            <td>{{order.order.orderDate | date:"dd-MM-yyyy"}}</td>
+                            <td>{{order.order.destinationAddress.firstName}} {{order.order.destinationAddress.lastName}}
+                            </td>
+
+
+                            <td>{{order.order.totalPrice | nuevoSol}}</td>
+                            <td>{{order.order.state}}</td>
+
+                            <td><a data-toggle="modal" [attr.data-target]="'#modalShowOrderDetails'+i"
+                                class="check-btn sqr-btn " style="text-decoration: underline;">Informacion del
+                                pedido</a></td>
+
+                            <div class="modal fade" id="modalShowOrderDetails{{i}}" tabindex="-1" role="dialog"
+                              aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Detalles del pedido</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <div class="container">
+                                      <div class="row">
+                                        <div class="col-lg-6 mb-4">
+                                          <div class="card text-left">
+                                            <div class="card-header">
+                                              Direccion de envio
+                                            </div>
+                                            <div class="card-body">
+                                              Nombres: {{order.order.destinationAddress.firstName}}
+                                              {{order.order.destinationAddress.lastName}}<br>
+                                              DNI: {{order.order.destinationAddress.DNI}}<br>
+                                              Celular: {{order.order.destinationAddress.cellPhone}}<br>
+                                              Departamento: {{order.order.destinationAddress.department.name}}<br>
+                                              Provincia: {{order.order.destinationAddress.province.name}}<br>
+                                              Distrito: {{order.order.destinationAddress.district.name}}<br>
+                                              Direccion: {{order.order.destinationAddress.shippingAddress}}<br>
+
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-lg-6 mb-4">
+                                          <div class="card text-left">
+                                            <div class="card-header">
+                                              Informacion
+                                            </div>
+                                            <div class="card-body">
+                                              Metodo de pago: {{order.order.paymentMethod}}<br>
+                                              Estado: <span class="font-weight-bold">
+                                                {{order.order.state}}
+                                              </span><br>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-12 mb-4 text-left">
+                                          <div class="table-responsive">
+                                            <table class="table table-hover">
+                                              <thead>
+                                                <tr>
+                                                  <th scope="col">Producto</th>
+                                                  <th scope="col">Precio</th>
+                                                  <th scope="col">Cantidad</th>
+                                                  <th scope="col">subtotal</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                <tr *ngFor="let product of order.order.products">
+                                                  <td>{{product.product.name}}</td>
+                                                  <td>{{product.product.price | nuevoSol}}</td>
+                                                  <td>{{product.quantity}}</td>
+                                                  <td>{{product.product.price * product.quantity | nuevoSol}}</td>
+                                                </tr>
+                                              </tbody>
+                                              <tfoot>
+                                                <tr>
+                                                  <td class="text-right font-weight-bold" colspan="3">TOTAL</td>
+                                                  <td>{{order.order.totalPrice | nuevoSol}}</td>
+                                                </tr>
+                                              </tfoot>
+                                            </table>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="modal-footer hidden">
+                                    <button type="button" class=" btn btn-secondary" data-dismiss="modal"
+                                      #closeEditModal>Close</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </tr>
+
+                        </tbody>
+                      </table>
+                      <p class="" *ngIf="client.orders.length == 0">No hay ningun pedido registrado</p>
+                    </div>
+                  </div>
+                </div>
+
+                               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
